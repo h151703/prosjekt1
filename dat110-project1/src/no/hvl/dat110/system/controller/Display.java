@@ -3,6 +3,11 @@ package no.hvl.dat110.system.controller;
 import no.hvl.dat110.rpc.*;
 
 public class Display extends RPCStub {
+	
+	/*
+	 *  here you have to implement the client-side
+	 *  stub of the void write(String str) RPC method
+	 */
 
 	private byte RPCID = 1;
 
@@ -10,7 +15,10 @@ public class Display extends RPCStub {
 
 		// TODO
 		// implement marshalling, call and unmarshalling for write RPC method
-
-		throw new RuntimeException("not yet implemented");
+			
+		byte[] marshalled = RPCUtils.marshallString(RPCID, message);
+		
+		RPCUtils.unmarshallVoid(rmiclient.call(marshalled));
+		
 	}
 }

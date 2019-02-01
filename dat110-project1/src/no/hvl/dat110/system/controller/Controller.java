@@ -5,6 +5,13 @@ import no.hvl.dat110.rpc.RPCServerStopStub;
 
 public class Controller  {
 	
+	/*
+	 * The controller should regular retrieve the current temperature 
+	 * using a int read() RPC call on the sensor and 
+	 * then use a void write(String str) RPC call on the display 
+	 * the current temperature.
+	 */
+	
 	private static int N = 5;
 	
 	public static void main (String[] args) {

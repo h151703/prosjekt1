@@ -57,7 +57,7 @@ class TestMessage {
 		
 		message.decapsulate(encoded);
 		
-		byte[] payload = message.getData();
+		byte[] payload = message.getData();   
 		
 		assertEquals(5,payload.length);
 		
