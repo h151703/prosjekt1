@@ -1,68 +1,47 @@
 package no.hvl.dat110.messaging;
 
-import java.util.Arrays;
-
 public class Message {
 
-	private byte[] payload;
+    private byte[] payload;
 
-	/*
-	 * If Payload =< 127 bytes then this.payload = payload;
-	 */
+    public Message(byte[] payload) {
+        this.payload = payload; // TODO: check for length within boundary
+    }
 
-	public Message(byte[] payload) {
+    public Message() {
+        super();
+    }
 
-		if (payload.length <= 127) {
-			this.payload = payload; // TODO: check for length within boundary
-		}
-	}
+    public byte[] getData() {
+        return this.payload;
+    }
 
-	public Message() {
-		super();
-	}
+    public byte[] encapsulate() {
 
-	public byte[] getData() {
-		return this.payload;
-	}
+        byte[] encoded = new byte[128];
 
-	/*
-	 * The messaging protocol is based on sending segments of 128 bytes on the
-	 * underlying TCP connection such that the first byte of the segment is to be
-	 * interpreted as an integer in the range 0..127 specifying how many of the
-	 * subsequent 127 bytes is payload data. Any remaining bytes is simply
-	 * considered to be padding and can be ignored.
-	 */
+        encoded[0] = (byte) payload.length;
 
-	@SuppressWarnings({ "null", "unused" })
-	public byte[] encapsulate() {
+        for (int i = 0; i < payload.length; i++) {
+            encoded[i + 1] = payload[i];
+        }
 
-		byte[] encoded = new byte[128];
 
-		int payLength = payload.length; // convert payload length to byte
+        // TODO
+        // encapulate/encode the payload of the message
 
-		encoded[0] = (byte) payLength;
 
-		for (int i = 0; i < payLength; i++) {
-			encoded[i + 1] = payload[i];
-		}
+        return encoded;
 
-		// TODO
-		// encapulate/encode the payload of the message
+    }
 
-		return encoded;
+    public void decapsulate(byte[] received) {
 
-	}
-
-	public void decapsulate(byte[] received) {
-
-		// TODO
-		// decapsulate data in received and put in payload
-
-		payload = new byte[received[0]];
-
-		for (int i = 0; i < payload.length; i++) {
-			payload[i] = received[i + 1];
-		}
-
-	}
+        // TODO
+        // decapsulate data in received and put in payload
+        payload = new byte[received[0]];
+        for (int i = 0; i < payload.length; i++) {
+            payload[i] = received[i + 1];
+        }
+    }
 }

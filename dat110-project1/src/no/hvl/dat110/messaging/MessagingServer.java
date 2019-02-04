@@ -1,5 +1,6 @@
 package no.hvl.dat110.messaging;
 
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,11 +28,9 @@ public class MessagingServer {
 		Connection connection = null;
 
 		Socket connectionSocket = null;
-
 		try {
 			connectionSocket = welcomeSocket.accept();
-			connection = new Connection(welcomeSocket.accept());
-
+			connection = new Connection(connectionSocket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

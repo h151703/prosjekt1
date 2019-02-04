@@ -1,10 +1,8 @@
 package no.hvl.dat110.rpc;
 
 import java.util.HashMap;
+import no.hvl.dat110.messaging.*;
 
-import no.hvl.dat110.messaging.Connection;
-import no.hvl.dat110.messaging.Message;
-import no.hvl.dat110.messaging.MessagingServer;
 
 public class RPCServer {
 
@@ -35,18 +33,26 @@ public class RPCServer {
 		System.out.println("RPC SERVER ACCEPTED");
 
 		while (!stop) {
-
+			
+			int rpcid;
 			Message receiveMsg = connection.receive();
 
-			byte[] a = receiveMsg.getData();
+			byte[] request = receiveMsg.getData();
 
-			int rpcid = a[0];
+			 rpcid = request[0];
 
 			// lookup the methods to be invoked
+			 
+			 RPCImpl impl;
+			 
+			 impl = services.get(rpcid);
 
-			byte[] b = services.get(rpcid).invoke(a);
+			byte[] reply = impl.invoke(request);
+			
+			Message replymsg = new Message(reply);
+			
 
-			connection.send(new Message(b));
+			connection.send(replymsg);
 			
 			if (rpcid == RPCCommon.RPIDSTOP) {
 				stop = true;
@@ -59,9 +65,6 @@ public class RPCServer {
 			// - invoke the method
 			// - send back message containing RPC reply
 
-			if (rpcid == RPCCommon.RPIDSTOP) {
-				stop = true;
-			}
 		}
 	}
 

@@ -1,5 +1,6 @@
 package no.hvl.dat110.rpc;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class RPCUtils {
@@ -17,14 +18,14 @@ public class RPCUtils {
 	
 	public static byte[] marshallString(byte rpcid, String str) {
 
+		byte[] byteArray = str.getBytes();
 		byte[] encoded = new byte[str.getBytes().length +1];
 		
-		byte[] byteArray = str.getBytes();
 		
 		encoded[0] = rpcid;
 		
-		for(int i=1; i < byteArray.length + 1; i++) {
-			encoded[i] = byteArray[i-1];
+		for(int i=0; i < byteArray.length; i++) {
+			encoded[i+1] = byteArray[i];
 		}		
 
 		// TODO: marshall RPC identifier and string into byte array
@@ -80,26 +81,26 @@ public class RPCUtils {
 
 		byte[] encoded = new byte[5];
 		
-		//remember that an integer in java is 4 bytes
+
 
 		// TODO: marshall RPC identifier and string (int?) into byte array
 
-		for(int i = 0; i < 4; i++) {
-			encoded[i+1] = (byte) (x >> (i *8));
-		}
+		encoded[0] = rpcid;
+		
+		byte[] byteArray = ByteBuffer.allocate(4).putInt(x).array();
+		System.arraycopy(byteArray, 0, encoded, 1, byteArray.length);
 
 		return encoded;
 	}
 
 	public static int unmarshallInteger(byte[] data) {
 
-		int decoded = 0;
+		int decoded;
+		
+		byte[] byteArray = Arrays.copyOfRange(data, 1, data.length);
+		decoded = ByteBuffer.wrap(byteArray).getInt();
 
-		// TODO: unmarshall integer contained in data
-
-		for(int i = 0; i < 4; i++) {
-			decoded += Byte.toUnsignedInt(data[i+1]) << (i*8);
-		}
+	
 
 		return decoded;
 
