@@ -1,6 +1,5 @@
 package no.hvl.dat110.messaging;
 
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -26,8 +25,9 @@ public class MessagingServer {
 	public Connection accept() {
 
 		Connection connection = null;
-
 		Socket connectionSocket = null;
+		
+		
 		try {
 			connectionSocket = welcomeSocket.accept();
 			connection = new Connection(connectionSocket);

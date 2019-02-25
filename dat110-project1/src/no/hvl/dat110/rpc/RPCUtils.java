@@ -6,21 +6,10 @@ import java.util.Arrays;
 public class RPCUtils {
 
 	
-	/*
-	 * RPCUtils.java containing utility methods for the unmarshalling
-	 * and marshalling of the data types supported. 
-	 * The implementation of the marshalling/unmarshalling of booleans
-	 * is provided and can be used for inspiration. 
-	 * Remember that an integer in Java is 4 bytes.
-	 * 
-	 */
-	
-	
 	public static byte[] marshallString(byte rpcid, String str) {
 
 		byte[] byteArray = str.getBytes();
 		byte[] encoded = new byte[str.getBytes().length +1];
-		
 		
 		encoded[0] = rpcid;
 		
@@ -28,19 +17,23 @@ public class RPCUtils {
 			encoded[i+1] = byteArray[i];
 		}		
 
-		// TODO: marshall RPC identifier and string into byte array
-
 		return encoded;
 	}
 
 	public static String unmarshallString(byte[] data) {
+		
+		//TODO: unmarshall String contained in data into decoded
+		
+		byte[] byteArray = Arrays.copyOfRange(data, 1, data.length);
 
-		String decoded = new String(Arrays.copyOfRange(data, 1, data.length));
+		String decoded = new String(byteArray);
 		
 		return decoded;
 	}
 
 	public static byte[] marshallVoid(byte rpcid) {
+		
+		//TODO: marshall RPC identifier in case of void type
 
 		byte[] encoded = new byte[1]; 
 		
@@ -51,12 +44,15 @@ public class RPCUtils {
 	}
 
 	public static void unmarshallVoid(byte[] data) {
+		
+		//TODO: marshall RPC identifier in case of void type
   
 		return;
 		
 	}
 
 	public static byte[] marshallBoolean(byte rpcid, boolean b) {
+		
 
 		byte[] encoded = new byte[2];
 
@@ -78,12 +74,11 @@ public class RPCUtils {
 	}
 
 	public static byte[] marshallInteger(byte rpcid, int x) {
+		
+		// TODO: marshall RPC identifier and string into byte array
+
 
 		byte[] encoded = new byte[5];
-		
-
-
-		// TODO: marshall RPC identifier and string (int?) into byte array
 
 		encoded[0] = rpcid;
 		
@@ -100,7 +95,6 @@ public class RPCUtils {
 		byte[] byteArray = Arrays.copyOfRange(data, 1, data.length);
 		decoded = ByteBuffer.wrap(byteArray).getInt();
 
-	
 
 		return decoded;
 

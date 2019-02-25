@@ -2,46 +2,55 @@ package no.hvl.dat110.messaging;
 
 public class Message {
 
-    private byte[] payload;
+	private byte[] payload;
+	public int segmentSize = MessageConfig.SEGMENTSIZE;
 
-    public Message(byte[] payload) {
-        this.payload = payload; // TODO: check for length within boundary
-    }
+	public Message(byte[] payload) {
+		this.payload = payload; // TODO: check for length within boundary
 
-    public Message() {
-        super();
-    }
+		if (payload.length + 1 > segmentSize) {
+			try {
+				throw new Exception("Payload is too big.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
-    public byte[] getData() {
-        return this.payload;
-    }
+	}
 
-    public byte[] encapsulate() {
+	public Message() {
+		super();
+	}
 
-        byte[] encoded = new byte[128];
+	public byte[] getData() {
+		return this.payload;
+	}
 
-        encoded[0] = (byte) payload.length;
+	public byte[] encapsulate() {
 
-        for (int i = 0; i < payload.length; i++) {
-            encoded[i + 1] = payload[i];
-        }
+		// TODO
+		// encapulate/encode the payload of the message
 
+		byte[] encoded = new byte[segmentSize];
 
-        // TODO
-        // encapulate/encode the payload of the message
+		encoded[0] = (byte) payload.length;
 
+		for (int i = 0; i < payload.length; i++) {
+			encoded[i + 1] = payload[i];
+		}
 
-        return encoded;
+		return encoded;
 
-    }
+	}
 
-    public void decapsulate(byte[] received) {
+	public void decapsulate(byte[] received) {
 
-        // TODO
-        // decapsulate data in received and put in payload
-        payload = new byte[received[0]];
-        for (int i = 0; i < payload.length; i++) {
-            payload[i] = received[i + 1];
-        }
-    }
+		// TODO
+		// decapsulate data in received and put in payload
+		
+		payload = new byte[received[0]];
+		for (int i = 0; i < payload.length; i++) {
+			payload[i] = received[i + 1];
+		}
+	}
 }

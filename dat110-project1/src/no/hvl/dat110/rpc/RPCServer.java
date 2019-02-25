@@ -24,13 +24,15 @@ public class RPCServer {
 
 	public void run() {
 
-		boolean stop = false;
+		
 
 		System.out.println("RPC SERVER RUN - Services: " + services.size());
 
 		connection = msgserver.accept();
 
 		System.out.println("RPC SERVER ACCEPTED");
+		
+		boolean stop = false;
 
 		while (!stop) {
 			
@@ -43,15 +45,11 @@ public class RPCServer {
 
 			// lookup the methods to be invoked
 			 
-			 RPCImpl impl;
-			 
-			 impl = services.get(rpcid);
+			 RPCImpl impl = services.get(rpcid);
 
-			byte[] reply = impl.invoke(request);
+			byte[] reply = (impl != null) ? impl.invoke(request) : new byte[0];
 			
 			Message replymsg = new Message(reply);
-			
-
 			connection.send(replymsg);
 			
 			if (rpcid == RPCCommon.RPIDSTOP) {
