@@ -5,13 +5,6 @@ import no.hvl.dat110.rpc.RPCServerStopStub;
 
 public class Controller  {
 	
-	/*
-	 * The controller should regular retrieve the current temperature 
-	 * using a int read() RPC call on the sensor and 
-	 * then use a void write(String str) RPC call on the display 
-	 * the current temperature.
-	 */
-	
 	private static int N = 5;
 	
 	public static void main (String[] args) {
@@ -34,21 +27,34 @@ public class Controller  {
 		// create RPC clients for display device and sensor device
 		// register RPC methods in the RPC layer
 		
-		if (true) {
-			  throw new RuntimeException("not yet implemented");
-		}
+		displayclient.connect();
+		sensorclient.connect();
+		
+		display = new Display();
+		sensor =  new Sensor();
+		
+		display.register(displayclient);
+		sensor.register(sensorclient);
+		
 		
 		// register stop methods in the RPC middleware
+		
 		displayclient.register(stopdisplay);
 		sensorclient.register(stopsensor);
+		
+		for(int i = 0; i < N; i++) {
+			display.write("Temperatur: " + sensor.read());
+			try {
+				Thread.sleep(1000);
+			}catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		// TODO:
 		// loop while reading from sensor and write to display via RPC
 		
-		if (true) {
-			  throw new RuntimeException("not yet implemented");
-			}
-		
+	
 		stopdisplay.stop();
 		stopsensor.stop();
 	
